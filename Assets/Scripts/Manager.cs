@@ -12,6 +12,9 @@ public class Manager : MonoBehaviour
     public List<string> lstLatinNumeralsChar = new List<string>();
     public List<string> lstNormalNumeralsChar = new List<string>();
 
+    public AudioSource audioSource;
+    public AudioClip audioClip;
+
     private bool errorDisplayed;
     private bool displayValid;
     private bool switchBtnClick;
@@ -85,6 +88,7 @@ public class Manager : MonoBehaviour
 
     public void BtnClick(char caption)
     {
+        audioSource.PlayOneShot(audioClip);
         if (errorDisplayed)
             ClearCalc();
         if((caption >= '0' && caption <= '9') || caption == '.')
@@ -121,6 +125,7 @@ public class Manager : MonoBehaviour
 
     public void SwitchBtnClick()
     {
+        audioSource.PlayOneShot(audioClip);
         if (!switchBtnClick)
         {
             for (int i = 0; i < lstNormalNumerals.Count; i++)
