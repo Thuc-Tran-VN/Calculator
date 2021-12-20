@@ -41,7 +41,7 @@ public class Manager : MonoBehaviour
         storedOperator = ' ';
     }
     
-    private void updateDigitLabel()
+    private void UpdateLabel()
     {
         if (!errorDisplayed)
         {
@@ -83,7 +83,7 @@ public class Manager : MonoBehaviour
                 break;
         }
         currentVal = result;
-        updateDigitLabel();
+        UpdateLabel();
     }
 
     public void BtnClick(char caption)
@@ -119,7 +119,7 @@ public class Manager : MonoBehaviour
             operatorLabel.text = caption.ToString();
             storedOperator = caption;
             storedVal = currentVal;
-            updateDigitLabel();
+            UpdateLabel();
         }
     }
 
