@@ -2,18 +2,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Manager : MonoBehaviour
+public class ButtonManager : MonoBehaviour
 {
+    #region Singleton
+    protected static ButtonManager instance;
+    public static ButtonManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                var gO = new GameObject();
+                instance = gO.AddComponent<ButtonManager>();
+            }
+            return instance;
+        }
+    }
+    #endregion
+
     public TextMeshProUGUI digitLabel;
     public TextMeshProUGUI operatorLabel;
     public TextMeshProUGUI resultLabel;
 
-    public List<GameObject> lstNormalNumerals = new List<GameObject>();
-    public List<string> lstLatinNumeralsChar = new List<string>();
-    public List<string> lstNormalNumeralsChar = new List<string>();
+    public List<TextMeshProUGUI> lstNormalNumerals = new List<TextMeshProUGUI>();
 
-    public AudioSource audioSource;
-    public AudioClip audioClip;
+    Subject subject = new Subject();
 
     private bool errorDisplayed;
     private bool displayValid;
@@ -25,10 +38,41 @@ public class Manager : MonoBehaviour
 
     private char storedOperator;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
     void Start()
     {
-        BtnClick('c');
+        Init();
+        //BtnClick('c');
         switchBtnClick = false;
+    }
+
+    private void Init()
+    {
+        ButtonLabel btn1 = new ButtonLabel(lstNormalNumerals[0], new ChangeNumber1());
+        ButtonLabel btn2 = new ButtonLabel(lstNormalNumerals[1], new ChangeNumber2());
+        ButtonLabel btn3 = new ButtonLabel(lstNormalNumerals[2], new ChangeNumber3());
+        ButtonLabel btn4 = new ButtonLabel(lstNormalNumerals[3], new ChangeNumber4());
+        ButtonLabel btn5 = new ButtonLabel(lstNormalNumerals[4], new ChangeNumber5());
+        ButtonLabel btn6 = new ButtonLabel(lstNormalNumerals[5], new ChangeNumber6());
+        ButtonLabel btn7 = new ButtonLabel(lstNormalNumerals[6], new ChangeNumber7());
+        ButtonLabel btn8 = new ButtonLabel(lstNormalNumerals[7], new ChangeNumber8());
+        ButtonLabel btn9 = new ButtonLabel(lstNormalNumerals[8], new ChangeNumber9());
+
+        subject.AddObserver(btn1);
+        subject.AddObserver(btn2);
+        subject.AddObserver(btn3);
+        subject.AddObserver(btn4);
+        subject.AddObserver(btn5);
+        subject.AddObserver(btn6);
+        subject.AddObserver(btn7);
+        subject.AddObserver(btn8);
+        subject.AddObserver(btn9);
     }
 
     private void ClearCalc()
@@ -88,7 +132,7 @@ public class Manager : MonoBehaviour
 
     public void BtnClick(char caption)
     {
-        audioSource.PlayOneShot(audioClip);
+        AudioManager.Instance.PlayAudio(AudioManager.Instance.audioClip);
         if (errorDisplayed)
             ClearCalc();
         if((caption >= '0' && caption <= '9') || caption == '.')
@@ -125,23 +169,13 @@ public class Manager : MonoBehaviour
 
     public void SwitchBtnClick()
     {
-        audioSource.PlayOneShot(audioClip);
-        if (!switchBtnClick)
-        {
-            for (int i = 0; i < lstNormalNumerals.Count; i++)
-            {
-                lstNormalNumerals[i].GetComponentInChildren<TextMeshProUGUI>().text = lstLatinNumeralsChar[i];
-            }
-            switchBtnClick = true;
-        }
-        else
-        {
-            for (int i = 0; i < lstNormalNumerals.Count; i++)
-            {
-                lstNormalNumerals[i].GetComponentInChildren<TextMeshProUGUI>().text = lstNormalNumeralsChar[i];
-            }
-            switchBtnClick = false;
-        }
-        
+        AudioManager.Instance.PlayAudio(AudioManager.Instance.audioClip);
+        subject.Notify();
+    }
+
+
+    private void OnDestroy()
+    {
+        instance = null;
     }
 }

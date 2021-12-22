@@ -1,29 +1,12 @@
-using TMPro;
 using UnityEngine;
 
 public class CalculatorButton : MonoBehaviour
 {
-    public TextMeshProUGUI label;
+    public char value;
 
-    public Manager calcManager
+    public void OnClickBtn()
     {
-        get
-        {
-            if (_calcManager == null)
-                _calcManager = GetComponentInParent<Manager>();
-            return _calcManager;
+        ButtonManager.Instance.BtnClick(value);
 
-        }
-    }
-    static Manager _calcManager;
-
-    public void OnBtnClick()
-    {
-        calcManager.BtnClick(label.text[0]);
-    }
-
-    public void OnSwichBtnClick()
-    {
-        calcManager.SwitchBtnClick();
     }
 }
