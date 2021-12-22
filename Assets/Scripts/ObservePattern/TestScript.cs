@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class TestScript : MonoBehaviour
 {
-    //This is comment on branch training
+    //This is comment on branch test
 }
